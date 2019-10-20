@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<extension key="nl.onvergetelijk.event" type="module">
+  <file>kampevent</file>
+  <name>Onvergetelijke Zomerkampen - Event</name>
+  <description>Deze extensie regelt de instellingen rondom de vacatures en beschikbaarheid van de kampevents</description>
+  <license>GNU AGPL</license>
+  <maintainer>
+    <author>Richard van Oosterhout</author>
+    <email>info@onvergetelijk.nl</email>
+  </maintainer>
+  <releaseDate>2018-12-01</releaseDate>
+  <version>0.1</version>
+  <develStage>beta</develStage>
+  <compatibility>
+    <ver>5.19</ver>
+  </compatibility>
+  <comments>This module extension is to Stichting Onvergetelijke Zomerkampen</comments>
+</extension>
