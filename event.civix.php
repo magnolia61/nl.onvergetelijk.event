@@ -5,7 +5,7 @@
 /**
  * (Delegated) Implementation of hook_civicrm_config
  */
-function _kampevent_civix_civicrm_config(&$config = NULL) {
+function _event_civix_civicrm_config(&$config = NULL) {
 	static $configured = FALSE;
 	if ($configured) {
 		return;
@@ -33,8 +33,8 @@ function _kampevent_civix_civicrm_config(&$config = NULL) {
  *
  * @param $files array(string)
  */
-function _kampevent_civix_civicrm_xmlMenu(&$files) {
-	foreach (_kampevent_civix_glob(__DIR__ . '/xml/Menu/*.xml') as $file) {
+function _event_civix_civicrm_xmlMenu(&$files) {
+	foreach (_event_civix_glob(__DIR__ . '/xml/Menu/*.xml') as $file) {
 		$files[] = $file;
 	}
 }
@@ -42,9 +42,9 @@ function _kampevent_civix_civicrm_xmlMenu(&$files) {
 /**
  * Implementation of hook_civicrm_install
  */
-function _kampevent_civix_civicrm_install() {
-	_kampevent_civix_civicrm_config();
-	if ($upgrader = _kampevent_civix_upgrader()) {
+function _event_civix_civicrm_install() {
+	_event_civix_civicrm_config();
+	if ($upgrader = _event_civix_upgrader()) {
 		return $upgrader->onInstall();
 	}
 }
@@ -52,9 +52,9 @@ function _kampevent_civix_civicrm_install() {
 /**
  * Implementation of hook_civicrm_uninstall
  */
-function _kampevent_civix_civicrm_uninstall() {
-	_kampevent_civix_civicrm_config();
-	if ($upgrader = _kampevent_civix_upgrader()) {
+function _event_civix_civicrm_uninstall() {
+	_event_civix_civicrm_config();
+	if ($upgrader = _event_civix_upgrader()) {
 		return $upgrader->onUninstall();
 	}
 }
@@ -62,9 +62,9 @@ function _kampevent_civix_civicrm_uninstall() {
 /**
  * (Delegated) Implementation of hook_civicrm_enable
  */
-function _kampevent_civix_civicrm_enable() {
-	_kampevent_civix_civicrm_config();
-	if ($upgrader = _kampevent_civix_upgrader()) {
+function _event_civix_civicrm_enable() {
+	_event_civix_civicrm_config();
+	if ($upgrader = _event_civix_upgrader()) {
 		if (is_callable(array($upgrader, 'onEnable'))) {
 			return $upgrader->onEnable();
 		}
@@ -74,9 +74,9 @@ function _kampevent_civix_civicrm_enable() {
 /**
  * (Delegated) Implementation of hook_civicrm_disable
  */
-function _kampevent_civix_civicrm_disable() {
-	_kampevent_civix_civicrm_config();
-	if ($upgrader = _kampevent_civix_upgrader()) {
+function _event_civix_civicrm_disable() {
+	_event_civix_civicrm_config();
+	if ($upgrader = _event_civix_upgrader()) {
 		if (is_callable(array($upgrader, 'onDisable'))) {
 			return $upgrader->onDisable();
 		}
@@ -92,13 +92,13 @@ function _kampevent_civix_civicrm_disable() {
  * @return mixed  based on op. for 'check', returns array(boolean) (TRUE if upgrades are pending)
  *                for 'enqueue', returns void
  */
-function _kampevent_civix_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
-	if ($upgrader = _kampevent_civix_upgrader()) {
+function _event_civix_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
+	if ($upgrader = _event_civix_upgrader()) {
 		return $upgrader->onUpgrade($op, $queue);
 	}
 }
 
-function _kampevent_civix_upgrader() {
+function _event_civix_upgrader() {
 	return NULL; //	no upgrader for custom extensions
 }
 
@@ -112,7 +112,7 @@ function _kampevent_civix_upgrader() {
  * @param $pattern string, glob pattern, eg "*.txt"
  * @return array(string)
  */
-function _kampevent_civix_find_files($dir, $pattern) {
+function _event_civix_find_files($dir, $pattern) {
 	if (is_callable(array('CRM_Utils_File', 'findFiles'))) {
 		return CRM_Utils_File::findFiles($dir, $pattern);
 	}
@@ -121,7 +121,7 @@ function _kampevent_civix_find_files($dir, $pattern) {
 	$result = array();
 	while (!empty($todos)) {
 		$subdir = array_shift($todos);
-		foreach (_kampevent_civix_glob("$subdir/$pattern") as $match) {
+		foreach (_event_civix_glob("$subdir/$pattern") as $match) {
 			if (!is_dir($match)) {
 				$result[] = $match;
 			}
@@ -144,8 +144,8 @@ function _kampevent_civix_find_files($dir, $pattern) {
  *
  * Find any *.mgd.php files, merge their content, and return.
  */
-function _kampevent_civix_civicrm_managed(&$entities) {
-	$mgdFiles = _kampevent_civix_find_files(__DIR__, '*.mgd.php');
+function _event_civix_civicrm_managed(&$entities) {
+	$mgdFiles = _event_civix_find_files(__DIR__, '*.mgd.php');
 	foreach ($mgdFiles as $file) {
 		$es = include $file;
 		foreach ($es as $e) {
@@ -169,7 +169,7 @@ function _kampevent_civix_civicrm_managed(&$entities) {
  * @param string $pattern
  * @return array, possibly empty
  */
-function _kampevent_civix_glob($pattern) {
+function _event_civix_glob($pattern) {
 	$result = glob($pattern);
 	return is_array($result) ? $result : array();
 }
@@ -182,7 +182,7 @@ function _kampevent_civix_glob($pattern) {
  * $item - menu you need to insert (parent/child attributes will be filled for you)
  * $parentId - used internally to recurse in the menu structure
  */
-function _kampevent_civix_insert_navigation_menu(&$menu, $path, $item, $parentId = NULL) {
+function _event_civix_insert_navigation_menu(&$menu, $path, $item, $parentId = NULL) {
 	static $navId;
 
 	// If we are done going down the path, insert menu
@@ -212,7 +212,7 @@ function _kampevent_civix_insert_navigation_menu(&$menu, $path, $item, $parentId
 					$entry['child'] = array();
 				}
 
-				$found = _kampevent_civix_insert_navigation_menu($entry['child'], implode('/', $path), $item, $key);
+				$found = _event_civix_insert_navigation_menu($entry['child'], implode('/', $path), $item, $key);
 			}
 		}
 		return $found;

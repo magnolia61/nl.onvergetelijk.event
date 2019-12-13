@@ -4,9 +4,20 @@ error_reporting(E_ALL);
 ini_set('display_errors', true);
 ini_set('display_startup_errors', true);
 
-require_once 'kampevent.civix.php';
+require_once 'event.civix.php';
 
-function kampevent_civicrm_custom($op, $groupID, $entityID, &$params) {
+function event_civicrm_buildForm($formName, &$form) {
+  if ($formName == 'CRM_Event_Form_Registration_ParticipantConfirm') {
+    #if ($form->getAction() == CRM_Core_Action::ADD) {
+      $defaults['emptySeats'] = '6161';
+      $form->setDefaults($defaults);
+      $emptySeats = 61;
+      watchdog('php', '<pre>CRM_Event_Form_Registration_ParticipantConfirm:' . print_r($formName, true) . '</pre>', null, WATCHDOG_DEBUG);
+    #}
+  }
+}
+
+function event_civicrm_custom($op, $groupID, $entityID, &$params) {
 
 	$extdebug	= 1;
 
@@ -15,7 +26,7 @@ function kampevent_civicrm_custom($op, $groupID, $entityID, &$params) {
 	//if (!in_array($groupID, array("139","190","165"))) { // ALLEEN PART PROFILES
 		// 101  EVENT KENMERKEN
 		// 211  EVENT KENMERKEN WERVING 
-		// 103	TAB  kampevent
+		// 103	TAB  event
 		// 139	PART DEEL
 		// 190	PART LEID
 		// (140	PART LEID VOG)
@@ -164,7 +175,7 @@ function kampevent_civicrm_custom($op, $groupID, $entityID, &$params) {
 /**
  * Implementation of hook_civicrm_config
  */
-function kampevent_civicrm_config(&$config) {
+function event_civicrm_config(&$config) {
 	_curriculum_civix_civicrm_config($config);
 }
 
@@ -173,14 +184,14 @@ function kampevent_civicrm_config(&$config) {
  *
  * @param $files array(string)
  */
-function kampevent_civicrm_xmlMenu(&$files) {
+function event_civicrm_xmlMenu(&$files) {
 	_curriculum_civix_civicrm_xmlMenu($files);
 }
 
 /**
  * Implementation of hook_civicrm_install
  */
-function kampevent_civicrm_install() {
+function event_civicrm_install() {
 	#CRM_Utils_File::sourceSQLFile(CIVICRM_DSN, __DIR__ . '/sql/auto_install.sql');
 	return _curriculum_civix_civicrm_install();
 }
@@ -188,7 +199,7 @@ function kampevent_civicrm_install() {
 /**
  * Implementation of hook_civicrm_uninstall
  */
-function kampevent_civicrm_uninstall() {
+function event_civicrm_uninstall() {
 	#CRM_Utils_File::sourceSQLFile(CIVICRM_DSN, __DIR__ . '/sql/auto_uninstall.sql');
 	return _curriculum_civix_civicrm_uninstall();
 }
@@ -196,14 +207,14 @@ function kampevent_civicrm_uninstall() {
 /**
  * Implementation of hook_civicrm_enable
  */
-function kampevent_civicrm_enable() {
+function event_civicrm_enable() {
 	return _curriculum_civix_civicrm_enable();
 }
 
 /**
  * Implementation of hook_civicrm_disable
  */
-function kampevent_civicrm_disable() {
+function event_civicrm_disable() {
 	return _curriculum_civix_civicrm_disable();
 }
 
@@ -213,7 +224,7 @@ function kampevent_civicrm_disable() {
  * Generate a list of entities to create/deactivate/delete when this module
  * is installed, disabled, uninstalled.
  */
-function kampevent_civicrm_managed(&$entities) {
+function event_civicrm_managed(&$entities) {
 	return _curriculum_civix_civicrm_managed($entities);
 }
 
