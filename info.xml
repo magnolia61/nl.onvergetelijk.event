@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<extension key="nl.onvergetelijk.event" type="module">
+  <file>event</file>
+  <name>Onvergetelijke Zomerkampen - Event</name>
+  <description>Deze extensie regelt de instellingen rondom de vacatures en beschikbaarheid van de kampevents</description>
+  <license>GNU AGPL</license>
+  <maintainer>
+    <author>Richard van Oosterhout</author>
+    <email>webteam@onvergetelijk.nl</email>
+  </maintainer>
+  <releaseDate>2022-08-01</releaseDate>
+  <version>1.0</version>
+  <develStage>stable</develStage>
+  <compatibility>
+    <ver>5.45</ver>
+  </compatibility>
+  <comments>Stichting Onvergetelijke Zomerkampen</comments>
+  <civix>
+    <namespace>CRM/Onvergetelijk_Event</namespace>
+    <format>23.02.1</format>
+  </civix>
+  <classloader>
+    <psr0 prefix="CRM_" path="."/>
+    <psr4 prefix="Civi\" path="Civi"/>
+  </classloader>
+  <mixins>
+    <mixin>menu-xml@1.0.0</mixin>
+    <mixin>mgd-php@1.0.0</mixin>
+  </mixins>
+</extension>
